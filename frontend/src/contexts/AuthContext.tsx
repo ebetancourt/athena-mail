@@ -1,25 +1,29 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 interface AuthContextType {
     isAuthenticated: boolean;
-    user: any;
+    user: any | null;
     login: () => void;
     logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType>({
+export const defaultAuthContext: AuthContextType = {
     isAuthenticated: false,
     user: null,
     login: () => { },
     logout: () => { },
-});
+};
+
+const AuthContext = createContext<AuthContextType>(defaultAuthContext);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode; }> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState(null);
 
     const login = () => {
-        window.location.href = 'http://localhost:8000/api/auth/google/login';
+        console.log('Login function called');
+        const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+        window.location.href = `${backendUrl}/api/auth/google/login`;
     };
 
     const logout = () => {
@@ -28,15 +32,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; }> = ({ childre
         setUser(null);
     };
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            setIsAuthenticated(true);
-            // Decode JWT and set user info
-            // You might want to add token validation here
-        }
-    }, []);
-
     return (
         <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
             {children}
@@ -44,4 +39,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode; }> = ({ childre
     );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+};

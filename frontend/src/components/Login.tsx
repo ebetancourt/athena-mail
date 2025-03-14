@@ -1,24 +1,29 @@
-import React from 'react';
 import { Button, VStack, Text } from '@chakra-ui/react';
 import { useAuth } from '../contexts/AuthContext';
 
 export const Login = () => {
-    const { login } = useAuth();
+    const auth = useAuth();
+
+    if (!auth) {
+        return null; // or loading state
+    }
+
+    const { login } = auth;
+
+    const handleLogin = () => {
+        console.log('Login button clicked');
+        login();
+    };
 
     return (
-        <VStack spacing={4} align="center" justify="center" height="100vh">
+        <VStack gap={4} w={{ base: "100%", md: "sm" }}>
             <Text fontSize="2xl">Welcome!</Text>
             <Button
                 colorScheme="blue"
-                onClick={login}
-                leftIcon={<GoogleIcon />}
+                onClick={handleLogin}
             >
-                Sign in with Google
+                Sign in with GoogleAPI
             </Button>
         </VStack>
     );
 };
-
-const GoogleIcon = () => (
-    <span>G</span>
-);
