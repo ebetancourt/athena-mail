@@ -1,0 +1,2 @@
+fastapi-oauth2-auth==0.3.0
+python-jose[cryptography]
