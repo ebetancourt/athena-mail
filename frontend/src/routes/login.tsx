@@ -14,8 +14,7 @@ import { InputGroup } from "@/components/ui/input-group"
 import { PasswordInput } from "@/components/ui/password-input"
 import useAuth, { isLoggedIn } from "@/hooks/useAuth"
 import Logo from "/assets/images/fastapi-logo.svg"
-import { emailPattern, passwordRules } from "../utils";
-import { Login as GoogleLogin } from "../components/Login";
+import { emailPattern, passwordRules } from "../utils"
 
 export const Route = createFileRoute("/login")({
   component: Login,
@@ -102,9 +101,8 @@ function Login() {
           Forgot Password?
         </RouterLink>
         <Button variant="solid" type="submit" loading={isSubmitting} size="md">
-          Log In with Password
+          Log In
         </Button>
-        <GoogleLogin />
         <Text>
           Don't have an account?{" "}
           <RouterLink to="/signup" className="main-link">
